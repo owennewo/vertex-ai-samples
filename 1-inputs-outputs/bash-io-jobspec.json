@@ -27,6 +27,7 @@
         "exec-input-output-bash-component": {
           "container": {
             "command": [
+              "bash",
               "run.sh",
               "--input1-path",
               "{{$.inputs.parameters['input_1']}}",
@@ -89,6 +90,6 @@
     "sdkVersion": "kfp-1.8.9"
   },
   "runtimeConfig": {
-    "gcsOutputDirectory": "$BUCKET_NAME/$IMAGE_NAME"
+    "gcsOutputDirectory": "gs://vertex-ai-by-example/bash-io"
   }
 }

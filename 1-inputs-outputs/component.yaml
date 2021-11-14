@@ -15,11 +15,12 @@ implementation:
     # The YAML language has two syntaxes for lists and you can use either of them. 
     # Here we use the "flow syntax" - comma-separated strings inside square brackets.
     command: [
+      bash,
       run.sh, 
       --input1-path,
       {inputValue: input_1},
       --param1, 
       {inputValue: parameter_1},
       --output1-path, 
-      {outputPath: output_1},
+      {outputPath: output_1}
     ]
