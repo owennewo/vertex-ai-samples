@@ -10,14 +10,14 @@ outputs:
 
 implementation:
   container:
-    image: gcr.io/vertex-ai-by-example/input-output-bash
+    image: gcr.io/vertex-ai-by-example/bash-io
     # command is a list of strings (command-line arguments). 
     # The YAML language has two syntaxes for lists and you can use either of them. 
     # Here we use the "flow syntax" - comma-separated strings inside square brackets.
     command: [
       run.sh, 
       --input1-path,
-      {inputPath: input_1},
+      {inputValue: input_1},
       --param1, 
       {inputValue: parameter_1},
       --output1-path, 

@@ -1,0 +1,94 @@
+{
+  "pipelineSpec": {
+    "components": {
+      "comp-input-output-bash-component": {
+        "executorLabel": "exec-input-output-bash-component",
+        "inputDefinitions": {
+          "parameters": {
+            "input_1": {
+              "type": "STRING"
+            },
+            "parameter_1": {
+              "type": "INT"
+            }
+          }
+        },
+        "outputDefinitions": {
+          "parameters": {
+            "output_1": {
+              "type": "STRING"
+            }
+          }
+        }
+      }
+    },
+    "deploymentSpec": {
+      "executors": {
+        "exec-input-output-bash-component": {
+          "container": {
+            "command": [
+              "run.sh",
+              "--input1-path",
+              "{{$.inputs.parameters['input_1']}}",
+              "--param1",
+              "{{$.inputs.parameters['parameter_1']}}",
+              "--output1-path",
+              "{{$.outputs.parameters['output_1'].output_file}}"
+            ],
+            "image": "gcr.io/vertex-ai-by-example/bash-io"
+          }
+        }
+      }
+    },
+    "pipelineInfo": {
+      "name": "bash-io-pipeline"
+    },
+    "root": {
+      "dag": {
+        "tasks": {
+          "input-output-bash-component": {
+            "cachingOptions": {
+              "enableCache": true
+            },
+            "componentRef": {
+              "name": "comp-input-output-bash-component"
+            },
+            "inputs": {
+              "parameters": {
+                "input_1": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "stringValue": "input1value"
+                    }
+                  }
+                },
+                "parameter_1": {
+                  "runtimeValue": {
+                    "constantValue": {
+                      "intValue": "4"
+                    }
+                  }
+                }
+              }
+            },
+            "taskInfo": {
+              "name": "input-output-bash-component"
+            }
+          }
+        }
+      },
+      "inputDefinitions": {
+        "parameters": {
+          "project_id": {
+            "type": "STRING"
+          }
+        }
+      }
+    },
+    "schemaVersion": "2.0.0",
+    "sdkVersion": "kfp-1.8.9"
+  },
+  "runtimeConfig": {
+    "gcsOutputDirectory": "$BUCKET_NAME/$IMAGE_NAME"
+  }
+}
