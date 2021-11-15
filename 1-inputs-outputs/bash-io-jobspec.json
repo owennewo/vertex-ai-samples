@@ -5,17 +5,37 @@
         "executorLabel": "exec-input-output-bash-component",
         "inputDefinitions": {
           "parameters": {
-            "input_1": {
+            "input_1_parameter": {
               "type": "STRING"
             },
-            "parameter_1": {
+            "input_2_parameter": {
               "type": "INT"
             }
           }
         },
         "outputDefinitions": {
+          "artifacts": {
+            "output_2_artifact_path": {
+              "artifactType": {
+                "schemaTitle": "system.Dataset",
+                "schemaVersion": "0.0.1"
+              }
+            },
+            "output_3_artifact_path": {
+              "artifactType": {
+                "schemaTitle": "system.HTML",
+                "schemaVersion": "0.0.1"
+              }
+            },
+            "output_4_metrics_path": {
+              "artifactType": {
+                "schemaTitle": "system.Metrics",
+                "schemaVersion": "0.0.1"
+              }
+            }
+          },
           "parameters": {
-            "output_1": {
+            "output_1_parameter_path": {
               "type": "STRING"
             }
           }
@@ -29,14 +49,26 @@
             "command": [
               "bash",
               "run.sh",
-              "--input1-path",
-              "{{$.inputs.parameters['input_1']}}",
-              "--param1",
-              "{{$.inputs.parameters['parameter_1']}}",
-              "--output1-path",
-              "{{$.outputs.parameters['output_1'].output_file}}"
+              "--input1",
+              "{{$.inputs.parameters['input_1_parameter']}}",
+              "--input2",
+              "{{$.inputs.parameters['input_2_parameter']}}",
+              "--input3-path",
+              "{inputPath: input_3_artefact_path}",
+              "--output1path",
+              "{{$.outputs.parameters['output_1_parameter_path'].output_file}}",
+              "--output2path",
+              "{{$.outputs.artifacts['output_2_artifact_path'].path}}",
+              "--output3path",
+              "{{$.outputs.artifacts['output_3_artifact_path'].path}}",
+              "--output4path",
+              "{{$.outputs.artifacts['output_4_metrics_path'].path}}"
             ],
-            "image": "gcr.io/vertex-ai-by-example/bash-io"
+            "image": "gcr.io/vertex-ai-by-example/bash-io:latest",
+            "resources": {
+              "cpuLimit": 0.5,
+              "memoryLimit": 0.5
+            }
           }
         }
       }
@@ -46,6 +78,18 @@
     },
     "root": {
       "dag": {
+        "outputs": {
+          "artifacts": {
+            "input-output-bash-component-output_4_metrics_path": {
+              "artifactSelectors": [
+                {
+                  "outputArtifactKey": "output_4_metrics_path",
+                  "producerSubtask": "input-output-bash-component"
+                }
+              ]
+            }
+          }
+        },
         "tasks": {
           "input-output-bash-component": {
             "cachingOptions": {
@@ -56,17 +100,17 @@
             },
             "inputs": {
               "parameters": {
-                "input_1": {
+                "input_1_parameter": {
                   "runtimeValue": {
                     "constantValue": {
-                      "stringValue": "input1value"
+                      "stringValue": "This is input1"
                     }
                   }
                 },
-                "parameter_1": {
+                "input_2_parameter": {
                   "runtimeValue": {
                     "constantValue": {
-                      "intValue": "4"
+                      "intValue": "42"
                     }
                   }
                 }
@@ -82,6 +126,16 @@
         "parameters": {
           "project_id": {
             "type": "STRING"
+          }
+        }
+      },
+      "outputDefinitions": {
+        "artifacts": {
+          "input-output-bash-component-output_4_metrics_path": {
+            "artifactType": {
+              "schemaTitle": "system.Metrics",
+              "schemaVersion": "0.0.1"
+            }
           }
         }
       }

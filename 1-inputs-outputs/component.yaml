@@ -1,26 +1,33 @@
 name: Input Output Bash Component
 description: Simple component that shows input/output metrics and artifacts.
-
-inputs:
-- {name: input_1, type: String, description: 'Data for input_1'}
-- {name: parameter_1, type: Integer, default: '100', description: 'Number of lines to copy'}
+inputs: #choose pythonic names i.e. lowercase with underscore otherwise bad things happen ime
+- {name: input_1_parameter, type: String, description: 'Parameter 1 is a simple datatype'}
+- {name: input_2_parameter, type: Integer, default: '100', description: 'Parameter 2 is a simple int datatype'}
+- {name: input_3_artefact_path, type: Dataset, optional: True, description: 'Parameter 3 is a parameter but is stored in a file'}
 
 outputs:
-- {name: output_1, type: String, description: 'output_1 data.'}
-
+- {name: output_1_parameter_path, type: String, description: 'All outputs are path data types, even simple data types'}
+- {name: output_2_artifact_path, type: Dataset, description: 'An output path where a dataset will be saved'}
+- {name: output_3_artifact_path, type: HTML, description: 'An output path where a dataset will be saved'}
+- {name: output_4_metrics_path, type: Metrics}
 implementation:
   container:
-    image: gcr.io/vertex-ai-by-example/bash-io
-    # command is a list of strings (command-line arguments). 
-    # The YAML language has two syntaxes for lists and you can use either of them. 
-    # Here we use the "flow syntax" - comma-separated strings inside square brackets.
+    image: gcr.io/vertex-ai-by-example/bash-io:latest
     command: [
       bash,
       run.sh, 
-      --input1-path,
-      {inputValue: input_1},
-      --param1, 
-      {inputValue: parameter_1},
-      --output1-path, 
-      {outputPath: output_1}
+      --input1,
+      {inputValue: input_1_parameter},
+      --input2, 
+      {inputValue: input_2_parameter},
+      --input3-path, 
+      '{inputPath: input_3_artefact_path}',
+      --output1path, 
+      {outputPath: output_1_parameter_path},
+      --output2path, 
+      {outputPath: output_2_artifact_path},
+      --output3path, 
+      {outputPath: output_3_artifact_path},
+      --output4path, 
+      {outputPath: output_4_metrics_path}
     ]
